@@ -1,0 +1,21 @@
+version: '3'  # Указание версии Docker Compose, используемой для данного файла конфигурации.
+
+services:  # Описание сервисов, которые будут запущены.
+  prometheus:  # Название сервиса Prometheus.
+    image: prom/prometheus  # Docker-образ, который будет использоваться для запуска сервиса Prometheus.
+    ports:  # Открытие портов контейнера.
+      - "9090:9090"  # Привязка порта хоста к порту контейнера для доступа к веб-интерфейсу Prometheus.
+    volumes:  # Примонтированные тома для сервиса Prometheus.
+      - ./prometheus:/etc/prometheus  # Примонтирование локальной директории с конфигурацией Prometheus в контейнер.
+    command:  # Команда запуска контейнера Prometheus.
+      - '--config.file=/etc/prometheus/prometheus.yml'  # Передача параметра конфигурации Prometheus через командную строку.
+
+  grafana:  # Название сервиса Grafana.
+    image: grafana/grafana  # Docker-образ, который будет использоваться для запуска сервиса Grafana.
+    ports:  # Открытие портов контейнера.
+      - "3000:3000"  # Привязка порта хоста к порту контейнера для доступа к веб-интерфейсу Grafana.
+    environment:  # Переменные окружения для сервиса Grafana.
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Установка пароля администратора для Grafana.
+    
+  app:
+    image: app:v1.2.1
